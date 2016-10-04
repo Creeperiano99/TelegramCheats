@@ -281,6 +281,7 @@
 	.site-action {
 	text-align: center;
 	font-size: 18px;
+	text-shadow: 0 1px 1px #000000;
 	margin: 10px 0 0;
 	}
 	
@@ -360,6 +361,8 @@ and (max-width: 480px) {
 .box{
 border:2px solid;
 border-radius:2px;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+border-bottom: 3px solid;
 -moz-border-radius:2px; /* Firefox 3.6 and earlier */
 padding:12px;
 }
@@ -371,12 +374,12 @@ padding:12px;
 		<div id="page-welcome">
 			<div class="texture">
 				<div class="main">
-					<h1 class="site-title"><img src="telegramgames.png" width="50%" height="50%"></h1>
+					<h1 class="site-title"><img src="telegramgames.png" width="70%" height="70%"></h1>
 					<p class="site-action">
 						Inserisci l'URL del gioco e<br>
 						il punteggio desiderato<br>
 						
-						<b>URL</b><br><textarea class="box" placeholder="URL" id="url"></textarea><br>
+						<b>URL</b><br><input class="box" placeholder="URL" id="url"><br>
 						<b>Punteggio</b><br><input class="box" placeholder="Punteggio" id="score"><br>					 
 						<a onclick="load();" class="button" rel="nofollow">Applica</a>
 						<div id="res">
