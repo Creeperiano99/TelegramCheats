@@ -3,11 +3,11 @@ function load() {
         .val();
     var score = $("#score")
         .val();
-    writeres("Error");
+    writeres("Caricamento");
     if (url.match(/tbot\.xyz/)) {
         var param = url.replace(/^.*#/g, '').replace(/\?.*$/g, '');
         var data = "data=" + param + "&score=" + score;
-        post("https://tbot.xyz/api/setScore", data, function(data) { writeres("OK"); }, function(data) { writeres("Error"); }, true);
+        post("https://tbot.xyz/api/setScore", data, function(data) { writeres("OK"); }, function(data) { writeres("Errore"); }, true);
         return;
     }
     if (url.match(/www\.gameeapp\.com/)) {
@@ -16,10 +16,10 @@ function load() {
             '{ "score": ' + score +
             ', "url": "' + param +
             '", "play_time": 100}';
-        post("https://bots.gameeapp.com/set-web-score-qkfnsog26w7173c9pk7whg0iau7zwhdkfd7ft3tn", data, function(data) { writeres("OK"); }, function(data) { writeres("Error"); });
+        post("https://bots.gameeapp.com/set-web-score-qkfnsog26w7173c9pk7whg0iau7zwhdkfd7ft3tn", data, function(data) { writeres("OK"); }, function(data) { writeres("Errore"); });
         return; 
     }
-    writeres("I cannot use cheats on this game. You can add support to new games by submitting a pull request to <a href='https://github.com/danog/telegramcheats' target='_blank'>the TelegramCheats repo</a>");
+    writeres("Non posso usare i trucchi su questo gioco. Puoi aggiungere il supporto ai nuovi giochi effettuando una <i>pull request</i> alla <a href='https://github.com/danog/telegramcheats' target='_blank'>Repository di TelegramCheats</a>");
 }
 function post(url, data, cb, failCb, proxy = false) {
     if (proxy) {
