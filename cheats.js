@@ -1,56 +1,3 @@
-function urlSafeDecode(urlencoded) {
-    try {
-        return decodeURIComponent(
-            urlencoded);
-    } catch (e) {
-        return urlencoded;
-    }
-}
-
-function urlParseHashParams(
-    locationHash) {
-    locationHash = locationHash.replace(
-        /^#/, '');
-    var params = {};
-    if (!locationHash.length) {
-        return params;
-    }
-    if (locationHash.indexOf('=') < 0 &&
-        locationHash.indexOf('?') < 0) {
-        params._path = urlSafeDecode(
-            locationHash);
-        return params;
-    }
-    var qIndex = locationHash.indexOf(
-        '?');
-    if (qIndex >= 0) {
-        var pathParam = locationHash.substr(
-            0, qIndex);
-        params._path = urlSafeDecode(
-            pathParam);
-        locationHash = locationHash.substr(
-            qIndex + 1);
-    }
-    var locationHashParams =
-        locationHash.split('&');
-    var i, param, paramName, paramValue;
-    for (i = 0; i < locationHashParams.length; i++) {
-        param = locationHashParams[i].split(
-            '=');
-        paramName = urlSafeDecode(param[
-            0]);
-        paramValue = param[1] === null ?
-            null : urlSafeDecode(param[
-                1]);
-        params[paramName] = paramValue;
-    }
-    return params;
-}
-
-function getcode(locationHash) {
-    return urlParseHashParams(locationHash.replace(/^.*#/, ''))._path;
-}
-
 function load() {
     var url = $("#url")
         .val();
@@ -58,21 +5,9 @@ function load() {
         .val();
     writeres("Error");
     if (url.match(/tbot\.xyz/)) {
-        var param = getcode(url);
-        var data = "data=" + param +
-            "&score=" + score;
-        $.ajax({
-            url: "https://tbot.xyz/api/setScore",
-            data: data,
-            type: 'POST',
-            processData: false,
-            async: false,
-            success: function(data) {
-                writeres(
-                    "OK"
-                );
-            }
-        });
+        var param = url.replace(/^.*#/g, '').replace(/\?.*$/g, '');
+        var data = "data=" + param + "&score=" + score;
+        post("https://tbot.xyz/api/setScore", data, function(data) { writeres("OK"); }, function(data) { writeres("Error"); }, true);
         return;
     }
     if (url.match(/www\.gameeapp\.com/)) {
@@ -81,27 +16,27 @@ function load() {
             '{ "score": ' + score +
             ', "url": "' + param +
             '", "play_time": 100}';
-        $.ajax({
-            url: "https://bots.gameeapp.com/set-web-score-qkfnsog26w7173c9pk7whg0iau7zwhdkfd7ft3tn",
-            data: data,
-            type: 'POST',
-            async: false,
-            dataType: 'json',
-            success: function(data) {
-                if (JSON.stringify(data) == '{"status":"OK"}') {
-                    writeres(
-                        "OK"
-                    );
-                    return;
-                }
-            }
-        });
-        return;
+        post("https://bots.gameeapp.com/set-web-score-qkfnsog26w7173c9pk7whg0iau7zwhdkfd7ft3tn", data, function(data) { writeres("OK"); }, function(data) { writeres("Error"); });
+        return; 
     }
     writeres("I cannot use cheats on this game. You can add support to new games by submitting a pull request to <a href='https://github.com/danog/telegramcheats' target='_blank'>the TelegramCheats repo</a>");
 }
-
+function post(url, data, cb, failCb, proxy = false) {
+    if (proxy) {
+        url = "https://proxy.daniil.it/?url=" + encodeURIComponent(url);
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var resp = xhr.responseText
+            cb(JSON.parse(resp))
+        } else if (failCb) {
+            failCb()
+        }
+    }
+    xhr.open("POST", url, true);
+    xhr.send(data);
+}
 function writeres(cos) {
-    $("#res")
-        .html(cos);
+    $("#res").html(cos);
 }
