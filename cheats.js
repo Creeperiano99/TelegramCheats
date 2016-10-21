@@ -1,13 +1,9 @@
-function cheat(url, score) {
-    if (url === '') {
-        writeres("No url was provided!");
-        return false;
-    }
-    if (!$.isNumeric(score)) {
-        writeres("No score was provided!");
-        return false;
-    }
-    writeres('');
+function load() {
+    var url = $("#url")
+        .val();
+    var score = $("#score")
+        .val();
+    writeres("Caricamento");
     if (url.match(/tbot\.xyz/)) {
         post("https://tbot.xyz/api/setScore", "data=" + url.replace(/^.*#/g, '').replace(/\?.*$/g, '') + "&score=" + score, function(data) { writeok(); }, function(data) { writeres('Error!'); }, true);
     } else if (url.match(/www\.gameeapp\.com/)) {
